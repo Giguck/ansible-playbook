@@ -68,3 +68,47 @@
     - name: Preview содержимого
       debug:
         msg: "{{ file_preview.stdout_lines }}"
+
+
+
+
+from cryptography.exceptions import InvalidSignature
+15:23:55  
+15:23:55  PLAY [Prepare remote nginx] ****************************************************
+15:23:57  ERROR! conflicting action statements: hosts, tasks
+15:23:57  
+15:23:57  The error appears to be in '/home/jenkins/agent/workspace/smeop/tools/NginxToSynginxStaticMigration/_nginx_migration_script/roles/tree/tasks/main.yml': line 2, column 3, but may
+15:23:57  be elsewhere in the file depending on the exact syntax problem.
+15:23:57  
+15:23:57  The offending line appears to be:
+15:23:57  
+15:23:57  ---
+15:23:57  - name: Создание файлового дерева и загрузка на сервер
+15:23:57    ^ here
+15:23:57  
+15:23:57  PLAY RECAP *********************************************************************
+15:23:57  pprb_korus_profile_ift     : ok=1    changed=0    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0   
+15:23:57  
+15:23:57  FATAL: command execution failed
+15:23:57  hudson.AbortException: Ansible playbook execution failed
+15:23:57  	at PluginClassLoader for ansible//org.jenkinsci.plugins.ansible.AnsiblePlaybookBuilder.perform(AnsiblePlaybookBuilder.java:328)
+15:23:57  	at PluginClassLoader for ansible//org.jenkinsci.plugins.ansible.workflow.AnsiblePlaybookStep$AnsiblePlaybookExecution.run(AnsiblePlaybookStep.java:466)
+15:23:57  	at PluginClassLoader for ansible//org.jenkinsci.plugins.ansible.workflow.AnsiblePlaybookStep$AnsiblePlaybookExecution.run(AnsiblePlaybookStep.java:365)
+15:23:57  	at PluginClassLoader for workflow-step-api//org.jenkinsci.plugins.workflow.steps.AbstractSynchronousNonBlockingStepExecution$1$1.call(AbstractSynchronousNonBlockingStepExecution.java:47)
+15:23:57  	at hudson.security.ACL.impersonate2(ACL.java:451)
+15:23:57  	at hudson.security.ACL.impersonate(ACL.java:463)
+15:23:57  	at PluginClassLoader for workflow-step-api//org.jenkinsci.plugins.workflow.steps.AbstractSynchronousNonBlockingStepExecution$1.run(AbstractSynchronousNonBlockingStepExecution.java:44)
+15:23:57  	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+15:23:57  	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+15:23:57  	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+15:23:57  	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+15:23:57  	at java.base/java.lang.Thread.run(Thread.java:840)
+15:23:57  hudson.AbortException: Ansible playbook execution failed
+15:23:57  Sleeping for 10 sec
+15:24:07  $ ssh-agent -k
+15:24:07  unset SSH_AUTH_SOCK;
+15:24:07  unset SSH_AGENT_PID;
+15:24:07  echo Agent pid 208 killed;
+15:24:07  [ssh-agent] Stopped.
+15:24:07  Agent sberlinux-pvlss-jenci0150-d4-30lk7 was deleted, but do not have a node body to cancel
+Finished: FAILURE
