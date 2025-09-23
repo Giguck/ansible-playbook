@@ -1,0 +1,70 @@
+---
+- name: Создание файлового дерева и загрузка на сервер
+  hosts: all
+  vars:
+    target_directory: /home  # Укажите здесь нужную директорию
+    output_filename: "file_tree_{{ ansible_hostname }}_{{ ansible_date_time.epoch }}.txt"
+    local_download_path: "./downloads/"
+  
+  tasks:
+    - name: Создание временной директории на удаленном хосте
+      file:
+        path: /tmp/ansible_file_tree
+        state: directory
+        mode: '0755'
+      become: yes
+
+    - name: Генерация файлового дерева
+      shell: |
+        find "{{ target_directory }}" -type f -printf "%T+ %p %k KB\n" | sort > "/tmp/ansible_file_tree/{{ output_filename }}"
+      args:
+        executable: /bin/bash
+      register: tree_result
+      failed_when: tree_result.rc != 0 and tree_result.rc != 1  # find возвращает 1 если нет прав доступа к некоторым файлам
+      become: yes
+
+    - name: Проверка создания файла
+      stat:
+        path: "/tmp/ansible_file_tree/{{ output_filename }}"
+      register: file_stat
+
+    - name: Показать информацию о созданном файле
+      debug:
+        msg: "Файл создан: {{ file_stat.stat.path }}, Размер: {{ file_stat.stat.size }} bytes"
+
+    - name: Создание локальной директории для загрузки
+      delegate_to: localhost
+      run_once: yes
+      file:
+        path: "{{ local_download_path }}"
+        state: directory
+        mode: '0755'
+
+    - name: Загрузка файла с деревом на сервер управления
+      fetch:
+        src: "/tmp/ansible_file_tree/{{ output_filename }}"
+        dest: "{{ local_download_path }}"
+        flat: yes
+      register: fetch_result
+
+    - name: Показать путь к загруженному файлу
+      debug:
+        msg: "Файл загружен в: {{ local_download_path }}{{ output_filename }}"
+
+    - name: Очистка временных файлов на удаленном хосте
+      file:
+        path: /tmp/ansible_file_tree
+        state: absent
+      become: yes
+      ignore_errors: yes
+
+    - name: Показать первые 10 строк файла для проверки
+      delegate_to: localhost
+      run_once: yes
+      command: head -n 10 "{{ local_download_path }}{{ output_filename }}"
+      register: file_preview
+      changed_when: false
+
+    - name: Preview содержимого
+      debug:
+        msg: "{{ file_preview.stdout_lines }}"
