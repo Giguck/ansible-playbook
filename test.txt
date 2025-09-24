@@ -104,32 +104,14 @@ synginx_ift ansible_host=tsldw-bbpp00002.cloud.delta.sbrf.ru ansible_user=syngxd
 
 
 
-[_nginx_migration_script] $ /home/jenkins/agent/tools/org.jenkinsci.plugins.ansible.AnsibleInstallation/ansible-core2.10.3/ansible210/bin/ansible-playbook tree.yml -i inventory.ini --extra-vars host=nginx_ift
-04:55:13  /home/jenkins/agent/tools/org.jenkinsci.plugins.ansible.AnsibleInstallation/ansible-core2.10.3/ansible210/lib/python3.6/site-packages/ansible/parsing/vault/__init__.py:44: CryptographyDeprecationWarning: Python 3.6 is no longer supported by the Python core team. Therefore, support for it is deprecated in cryptography. The next release of cryptography (40.0) will be the last to support Python 3.6.
-04:55:13    from cryptography.exceptions import InvalidSignature
-04:55:13  [WARNING]: Found both group and host with same name: nginx_ift
-04:55:13  [WARNING]: Found both group and host with same name: synginx_ift
-04:55:14  
-04:55:14  PLAY [Миграция конфигов с Nginx на Synginx] ************************************
-04:55:15  
-04:55:15  TASK [Gathering Facts] *********************************************************
-04:55:15  fatal: [nginx_ift]: FAILED! => {"msg": "Missing sudo password"}
-04:55:15  
-04:55:15  PLAY RECAP *********************************************************************
-04:55:15  nginx_ift                  : ok=0    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
-04:55:15  
-04:55:15  FATAL: command execution failed
-04:55:15  hudson.AbortException: Ansible playbook execution failed
-04:55:15  	at PluginClassLoader for ansible//org.jenkinsci.plugins.ansible.AnsiblePlaybookBuilder.perform(AnsiblePlaybookBuilder.java:328)
-04:55:15  	at PluginClassLoader for ansible//org.jenkinsci.plugins.ansible.workflow.AnsiblePlaybookStep$AnsiblePlaybookExecution.run(AnsiblePlaybookStep.java:466)
-04:55:15  	at PluginClassLoader for ansible//org.jenkinsci.plugins.ansible.workflow.AnsiblePlaybookStep$AnsiblePlaybookExecution.run(AnsiblePlaybookStep.java:365)
-04:55:15  	at PluginClassLoader for workflow-step-api//org.jenkinsci.plugins.workflow.steps.AbstractSynchronousNonBlockingStepExecution$1$1.call(AbstractSynchronousNonBlockingStepExecution.java:47)
-04:55:15  	at hudson.security.ACL.impersonate2(ACL.java:451)
-04:55:15  	at hudson.security.ACL.impersonate(ACL.java:463)
-04:55:15  	at PluginClassLoader for workflow-step-api//org.jenkinsci.plugins.workflow.steps.AbstractSynchronousNonBlockingStepExecution$1.run(AbstractSynchronousNonBlockingStepExecution.java:44)
-04:55:15  	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
-04:55:15  	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
-04:55:15  	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
-04:55:15  	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
-04:55:15  	at java.base/java.lang.Thread.run(Thread.java:840)
-04:55:15  hudson.AbortException: Ansible playbook execution failed
+[nginx_hosts]
+nginx_ift ansible_host=tkliw-bbpp00002.vm.mos.cloud.sbrf.ru ansible_user=syngxdevops ansible_private_key_file=send_ps.sh
+
+[synginx_hosts]
+synginx_ift ansible_host=tsldw-bbpp00002.cloud.delta.sbrf.ru ansible_user=syngxdevops ansible_private_key_file=send_ps.sh
+
+[nginx_ift:children]
+nginx_hosts
+
+[synginx_ift:children]
+synginx_hosts
